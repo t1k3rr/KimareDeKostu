@@ -27,10 +27,10 @@ end
 --[[
 	vRP Shit
 ]]
---[[ PROXY CLIENT-SIDE VERSION (https://github.com/ImagicTheCat/vRP)]]
+--[[ PROXY CLient]]
 --[[ Proxy interface system, used to add/call functions between resources]]
 Proxy = {} local proxy_rdata = {} local function proxy_callback(rvalues) --[[ save returned values, TriggerEvent is synchronous]] proxy_rdata = rvalues end local function proxy_resolve(itable,key) local iname = getmetatable(itable).name --[[ generate access function]] local fcall = function(args,callback) if args == nil then args = {} end TriggerCustomEvent(false, iname..":proxy",key,args,proxy_callback) return table.unpack(proxy_rdata) --[[ returns]] end itable[key] = fcall --[[ add generated call to table (optimization)]] return fcall end --[[ Add event handler to call interface functions (can be called multiple times for the same interface name with different tables)]] function Proxy.addInterface(name, itable) AddEventHandler(name..":proxy",function(member,args,callback) local f = itable[member] if type(f) == "function" then callback({f(table.unpack(args))}) --[[ call function with and return values through callback]] --[[ CancelEvent() cancel event doesn't seem to cancel the event for the other handlers, but if it does, uncomment this]] else --[[ print("error: proxy call "..name..":"..member.." not found")]] end end) end function Proxy.getInterface(name) local r = setmetatable({},{ __index = proxy_resolve, name = name }) return r end
---[[ TUNNEL CLIENT SIDE VERSION (https://github.com/ImagicTheCat/vRP)]]
+--[[ TUNNEL CLIENT SIDE VERSION]]
 --[[ Too bad that require doesn't exist client-side]]
 --[[ TOOLS DEF]]
 Tools = {} --[[ ID generator]] local IDGenerator = {} function Tools.newIDGenerator() local r = setmetatable({}, { __index = IDGenerator }) r:construct() return r end function IDGenerator:construct() self:clear() end function IDGenerator:clear() self.max = 0 self.ids = {} end --[[ return a new id]] function IDGenerator:gen() if #self.ids > 0 then return table.remove(self.ids) else local r = self.max self.max = self.max+1 return r end end --[[ free a previously generated id]] function IDGenerator:free(id) table.insert(self.ids,id) end
