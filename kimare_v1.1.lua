@@ -45,14 +45,14 @@ vRP = Proxy.getInterface("vRP")
 
 local ShouldShowMenu = true
 
---[[ Beczka wpisz tu ip serwera swojego to nawet nie wbijesz :3 ]]
+--[[ Fajne bo moje es :3 ]]
 local whitelistedServerIPs = {
 	"",
 }
 
 for k,v in pairs(whitelistedServerIPs) do
 	if GetCurrentServerEndpoint() == v then
-		print('Kimare: Nie wbijesz na BeczkaRP nygusie.')
+		print('Kimare: Nie wbijesz na ten serwer nygusie.')
 		ShouldShowMenu = false
 		return
 	end
